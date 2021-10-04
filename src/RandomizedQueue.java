@@ -1,6 +1,7 @@
 import org.jetbrains.annotations.NotNull;
 
-import java.util.*;
+import java.util.Iterator;
+import java.util.NoSuchElementException;
 
 public class RandomizedQueue<Item> implements Iterable<Item>{
     private int maxSize, size;
@@ -64,10 +65,11 @@ public class RandomizedQueue<Item> implements Iterable<Item>{
         return new RandomizedQueueIterator<>(this);
     }
 
-    private class RandomizedQueueIterator<Item> implements Iterator<Item> {
-        private int size, currentIndex;
-        private int[] order;
-        private RandomizedQueue<Item> queue;
+    private static class RandomizedQueueIterator<Item> implements Iterator<Item> {
+        private final int size;
+        private final int[] order;
+        private final RandomizedQueue<Item> queue;
+        private int currentIndex;
 
         public RandomizedQueueIterator(RandomizedQueue<Item> items) {
             size = items.size();
@@ -85,7 +87,7 @@ public class RandomizedQueue<Item> implements Iterable<Item>{
         }
 
         @Override
-        public Item next() {
+        public Item next() throws NoSuchElementException{
             if(size == 0)
                 throw new NoSuchElementException();
             return queue.get(order[currentIndex++]);
@@ -93,7 +95,7 @@ public class RandomizedQueue<Item> implements Iterable<Item>{
     }
     public static void main(String[] args){
         int n = 5;
-        RandomizedQueue<Integer> queue = new RandomizedQueue<Integer>();
+        RandomizedQueue<Integer> queue = new RandomizedQueue<>();
         for(int i = 0; i < n; ++i){
             queue.enqueue(i);
         }
